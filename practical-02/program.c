@@ -1,54 +1,132 @@
-/*
- * Name: Kanak Bindal
- * Roll No: SEA02
- * Practical 02: Diamond Shape with Numbers
- */
+// Name: Kanak Bindal
+// Roll no: SEA02
+// Student Result Database Management using Array of Structures  
 
 #include <stdio.h>
 
-void diamondNumbers(int n);
+typedef struct stud {
+   int rn;
+   char name[10];
+   char program[10];
+   char sub1[10];
+   char sub2[10];
+   int sub1_mk;
+   int sub2_mk;
+   int total;
+   float avg;
+} stud;
 
-void diamondNumbers(int n) {
-    int i, j;
+// Function declarations
+void create(stud s[], int n);
+void disp(stud s[], int n);
+void search(stud s[], int n, int key);
+void sort(stud s[], int n);
 
-    /* Upper half */
-    for (i = 1; i <= n; i++) {
-        for (j = n - 1; j >= i; j--) {
-            printf(" ");
-        }
-        for (j = 1; j <= i; j++) {
-            printf("%d ", i);
-        }
-        printf("\n");
-    }
+int main() {
+   stud s[20];
+   int n = 0, op, key;
 
-    /* Lower half */
-    for (i = n - 1; i >= 1; i--) {
-        for (j = i; j < n; j++) {
-            printf(" ");
-        }
-        for (j = 1; j <= i; j++) {
-            printf("%d ", i);
-        }
-        printf("\n");
-    }
+   do {
+      printf("\n1.Create\n2.Disp\n3.Search\n4.Sort\n5.Exit\n");
+      printf("Enter the Option: ");
+      scanf("%d", &op);
+
+      switch(op) {
+          case 1:
+              printf("Enter Number of Students: ");
+              scanf("%d", &n);
+              create(s, n);
+              break;
+          case 2:
+              disp(s, n);
+              break;
+          case 3:
+              printf("Enter Roll number to be searched:\t");
+              scanf("%d", &key);
+              search(s, n, key);
+              break;
+          case 4:
+              sort(s, n);
+              printf("Records sorted successfully by Roll Number!\n");
+              break;
+          case 5:
+              printf("Exiting program.\n");
+              break;
+          default:
+              printf("Invalid option! Please try again.\n");
+      }
+   } while(op != 5);
+   
+   return 0;
 }
 
-int main(void) {
-    int n;
+void create(stud s[], int n) {
+   for (int i = 0; i < n; i++) {
+       printf("\nEnter details for Student %d:\n", i + 1);
+       printf("Enter Student's Roll Number: ");
+       scanf("%d", &s[i].rn);
 
-    printf("Name: Kanak Bindal\n");
-    printf("Roll No: SEA02\n");
-    printf("Practical 02: Diamond Shape with Numbers\n\n");
-    printf("Enter the number of rows for the upper half (1-9): ");
+       printf("Enter Student's Name: ");
+       scanf("%s", s[i].name);
 
-    if (scanf("%d", &n) != 1 || n < 1 || n > 9) {
-        printf("Invalid input. Please enter a number from 1 to 9.\n");
-        return 1;
-    }
+       printf("Enter Student's Program: ");
+       scanf("%s", s[i].program);
 
-    printf("\nDiamond pattern:\n");
-    diamondNumbers(n);
+       printf("Enter Subject 1 Name: ");
+       scanf("%s", s[i].sub1);
 
-    return 0;
+       printf("Enter Subject 2 Name: ");
+       scanf("%s", s[i].sub2);
+
+       printf("Enter Subject 1 Marks: ");
+       scanf("%d", &s[i].sub1_mk);
+
+       printf("Enter Subject 2 Marks: ");
+       scanf("%d", &s[i].sub2_mk);
+
+       s[i].total = s[i].sub1_mk + s[i].sub2_mk;
+       s[i].avg = (float)s[i].total / 2.0;
+   }
+}
+
+void disp(stud s[], int n) {
+   if (n == 0) {
+       printf("No records found. Please create records first.\n");
+       return;
+   }
+   printf("\n-----------------------------------------------------------------------------------------------------------------\n");
+   printf("ROLL NO\tNAME\tPROGRAM\tSUB 1 NAME\tSUB 2 NAME\tSUB 1 MARKS\tSUB 2 MARKS\tTOTAL\tAVERAGE\n");
+   printf("-----------------------------------------------------------------------------------------------------------------\n");
+   for (int i = 0; i < n; i++) {
+       printf("%d\t%s\t%s\t%s\t\t%s\t\t%d\t\t%d\t\t%d\t%.2f\n", 
+           s[i].rn, s[i].name, s[i].program, s[i].sub1, s[i].sub2, s[i].sub1_mk, s[i].sub2_mk, s[i].total, s[i].avg);
+   }
+   printf("-----------------------------------------------------------------------------------------------------------------\n");
+}
+
+void search(stud s[], int n, int key) {
+   int i;
+   for(i = 0; i < n; i++) {
+       if(key == s[i].rn) {
+           printf("Record of Roll no %d FOUND\n", key);
+           printf("ROLL NO\tNAME\tPROGRAM\tSUB 1 NAME\tSUB 2 NAME\tSUB 1 MARKS\tSUB 2 MARKS\tTOTAL\tAVERAGE\n");
+           printf("%d\t%s\t%s\t%s\t\t%s\t\t%d\t\t%d\t\t%d\t%.2f\n", 
+               s[i].rn, s[i].name, s[i].program, s[i].sub1, s[i].sub2, s[i].sub1_mk, s[i].sub2_mk, s[i].total, s[i].avg);
+           return;
+       }
+   }
+   printf("Record of Roll no %d NOT FOUND\n", key);
+}
+
+void sort(stud s[], int n) {
+   stud temp;
+   for(int i = 0; i < n - 1; i++) {
+       for(int j = 0; j < n - 1 - i; j++) {
+           if(s[j].rn > s[j+1].rn) {
+               temp = s[j];
+               s[j] = s[j+1];
+               s[j+1] = temp;
+           }
+       }
+   }
 }
